@@ -66,7 +66,7 @@ def main():
     x_valid = valid.drop(columns=['target'])
     y_valid = valid['target']
 
-    with mlflow.start_run(run_name='Decision trees'):
+    with mlflow.start_run(run_name='Decision tree'):
         
         # classifier
         clf = DecisionTreeClassifier(
@@ -93,7 +93,7 @@ def main():
         })
 
         # log model
-        mlflow.sklearn.log_model(clf, 'Decision trees')
+        mlflow.sklearn.log_model(clf, 'model')
 
 
 if __name__ == '__main__':

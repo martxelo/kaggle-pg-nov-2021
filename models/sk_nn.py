@@ -116,7 +116,7 @@ def main():
         })
 
         # log model
-        mlflow.sklearn.log_model(model, 'Neural Net')
+        mlflow.sklearn.log_model(model, 'model')
 
 
 if __name__ == '__main__':
