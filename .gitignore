@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # intput/output folder
-.data/
+data/
 
 # mlruns
-.mlruns/
+mlruns/
