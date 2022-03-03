@@ -19,54 +19,49 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a neural network classifier')
 
     parser.add_argument(
-        '-test_size',
+        '--test_size',
         metavar='float',
         type=float,
         default=0.2,
-        help='Select fraction of test data'
-    )
+        help='Select fraction of test data')
     parser.add_argument(
-        '-n_components',
+        '--n_components',
         metavar='float',
         type=float,
-        default=1,
-        help='Select number of components for PCA'
-    )
+        default=0.95,
+        help='Select number of components for PCA')
     parser.add_argument(
-        '-hidden_layers_sizes',
+        '--hidden_layer_sizes',
         metavar='tuple',
         type=int,
         nargs='+',
         default=(50, 40, 3),
-        help='Neurons in hidden layers'
-    )
+        help='Neurons in hidden layers')
     parser.add_argument(
-        '-activation',
+        '--activation',
         metavar='string',
         type=str,
         default='logistic',
-        help='Activation function for hidden layers'
-    )
+        help='Activation function for hidden layers')
 
     args = parser.parse_args()
 
-    test_size = args.test_size
-    n_components = args.n_components
-    hidden_layer_sizes = args.hidden_layers_sizes
-    activation = args.activation
-
-    return test_size, n_components, hidden_layer_sizes, activation
-
+    return args
 
 
 def main():
 
-    test_size, n_components, hidden_layer_sizes, activation = parse_args()
+    args = parse_args()
+
+    test_size = args.test_size
+    n_components = args.n_components
+    hidden_layer_sizes = tuple(args.hidden_layer_sizes)
+    activation = args.activation
 
     np.random.seed(42)
 
     # read data
-    df = pd.read_csv('data/input/train.csv', nrows=5000)
+    df = pd.read_csv('data/input/train.csv', nrows=200000)
     df = df.drop(columns=['id'])
     
     # split in train and validation
@@ -85,8 +80,7 @@ def main():
         pca = PCA(n_components=n_components)
         clf = MLPClassifier(
             hidden_layer_sizes=hidden_layer_sizes,
-            activation=activation
-        )
+            activation=activation)
 
         # create pipeline
         model = Pipeline(
@@ -112,8 +106,7 @@ def main():
                            'pca_n_comp': model.steps[1][1].n_components_,
                            'pca_n_feat': model.steps[1][1].n_features_,
                            'clf_layers': hidden_layer_sizes,
-                           'clf_activation': activation
-        })
+                           'clf_activation': activation})
 
         # log model
         mlflow.sklearn.log_model(model, 'model')

@@ -16,40 +16,36 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a decision tree classifier')
 
     parser.add_argument(
-        '-test_size',
+        '--test_size',
         metavar='float',
         type=float,
         default=0.2,
-        help='Select fraction of test data'
-    )
+        help='Select fraction of test data')
     parser.add_argument(
-        '-criterion',
+        '--criterion',
         metavar='string',
         type=str,
         default='gini',
-        help='Criterion for measure the quality split'
-    )
+        help='Criterion for measure the quality split')
     parser.add_argument(
-        '-max_depth',
+        '--max_depth',
         metavar='int',
         type=int,
         default=None,
-        help='Maximum depth of the tree'
-    )
+        help='Maximum depth of the tree')
 
     args = parser.parse_args()
 
-    test_size = args.test_size
-    criterion = args.criterion
-    max_depth = args.max_depth
-
-    return test_size, criterion, max_depth
-
+    return args
 
 
 def main():
 
-    test_size, criterion, max_depth = parse_args()
+    args = parse_args()
+
+    test_size = args.test_size
+    criterion = args.criterion
+    max_depth = args.max_depth
 
     np.random.seed(42)
 
@@ -71,8 +67,7 @@ def main():
         # classifier
         clf = DecisionTreeClassifier(
             criterion=criterion,
-            max_depth=max_depth,
-        )
+            max_depth=max_depth)
 
         # fit classifier
         clf.fit(x_train, y_train)
@@ -89,8 +84,7 @@ def main():
         # log parameters and metrics
         mlflow.log_metrics({'auc': auc, 'acc': acc, 'f1': f1})
         mlflow.log_params({'criterion': criterion,
-                           'max_depth': max_depth
-        })
+                           'max_depth': max_depth})
 
         # log model
         mlflow.sklearn.log_model(clf, 'model')
