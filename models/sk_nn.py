@@ -5,12 +5,13 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import roc_auc_score, accuracy_score, f1_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 
 import mlflow
+
+from utils import log_metric
 
 
 
@@ -104,20 +105,13 @@ def main():
         # fit pipeline
         model.fit(x_train, y_train)
 
-        # predict probability and labels
+        # predict probability
         pred_proba = model.predict_proba(x_valid)[:,1]
-        pred_label = model.predict(x_valid)
 
-        # calculate metrics
-        auc = roc_auc_score(y_valid, pred_proba)
-        acc = accuracy_score(y_valid, pred_label)
-        f1 = f1_score(y_valid, pred_label)
+        # log metric
+        log_metric(y_valid, pred_proba)
 
-        # log parameters and metrics
-        mlflow.log_metrics({
-            'auc': auc,
-            'acc': acc,
-            'f1': f1})
+        # log parameters
         mlflow.log_params({
             'nrows': nrows,
             'pca_expl_var': n_components,
@@ -125,9 +119,6 @@ def main():
             'pca_n_feat': model.steps[1][1].n_features_,
             'clf_layers': hidden_layer_sizes,
             'clf_activation': activation})
-
-        # log model
-        mlflow.sklearn.log_model(model, 'model')
 
 
 if __name__ == '__main__':

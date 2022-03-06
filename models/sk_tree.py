@@ -5,10 +5,10 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import roc_auc_score, accuracy_score, f1_score
 
 import mlflow
 
+from utils import log_metric
 
 
 def parse_args():
@@ -74,7 +74,7 @@ def main():
     y_valid = valid['target']
 
     # classifier
-    clf = DecisionTreeClassifier(
+    model = DecisionTreeClassifier(
         criterion=criterion,
         max_depth=max_depth)
 
@@ -84,29 +84,20 @@ def main():
     with mlflow.start_run(run_name='Decision tree'):
         
         # fit classifier
-        clf.fit(x_train, y_train)
+        model.fit(x_train, y_train)
 
         # predict probability and labels
-        pred_proba = clf.predict_proba(x_valid)[:,1]
-        pred_label = clf.predict(x_valid)
+        pred_proba = model.predict_proba(x_valid)[:,1]
+        
+        # log metric
+        log_metric(y_valid, pred_proba)
 
-        # calculate metrics
-        auc = roc_auc_score(y_valid, pred_proba)
-        acc = accuracy_score(y_valid, pred_label)
-        f1 = f1_score(y_valid, pred_label)
-
-        # log parameters and metrics
-        mlflow.log_metrics({
-            'auc': auc,
-            'acc': acc,
-            'f1': f1})
+        # log parameters
         mlflow.log_params({
             'nrows': nrows,
             'criterion': criterion,
             'max_depth': max_depth})
 
-        # log model
-        mlflow.sklearn.log_model(clf, 'model')
 
 
 if __name__ == '__main__':
