@@ -53,16 +53,18 @@ def main():
     test_size = args.test_size
     criterion = args.criterion
     max_depth = args.max_depth
-
+    
+    # correct some arguments
     if nrows < 0:
         nrows = None
 
-
-    np.random.seed(42)
-
     # read data
-    df = pd.read_csv('data/input/train.csv', nrows=nrows)
+    df = pd.read_csv('data/input/train.csv')
     df = df.drop(columns=['id'])
+
+    # subsample
+    if nrows is not None:
+        df = df.sample(nrows)
     
     # split in train and validation
     train, valid = train_test_split(df, test_size=test_size)
@@ -98,7 +100,18 @@ def main():
             'criterion': criterion,
             'max_depth': max_depth})
 
+        # predict on test
+        test = pd.read_csv('data/input/test.csv')
+        test = test.drop(columns='id')
+        test_proba = model.predict_proba(test)
 
+        # write submission
+        sam_sub = pd.read_csv('data/input/sample_submission.csv')
+        sam_sub['target'] = test_proba[:,1]
+        sam_sub.to_csv('data/output/sample_submission.csv', index=False)
+
+        # log submission
+        mlflow.log_artifact('data/output/sample_submission.csv')
 
 if __name__ == '__main__':
     main()
