@@ -1,6 +1,6 @@
 # Tabular Playground Series - Nov 2021
 
-This repo allows to fit a neural network model (multi layer perceptron) with TensorFlow for the [Kaggle tabular competition of november 2021](https://www.kaggle.com/c/tabular-playground-series-nov-2021/). It uses MLfow for tracking experiments and runs and keeps a record of parameters and metrics for every run.
+This repo allows to fit a neural network model (multi layer perceptron) with [TensorFlow](https://www.tensorflow.org/) for the [Kaggle tabular competition of november 2021](https://www.kaggle.com/c/tabular-playground-series-nov-2021/). It uses [MLfow](https://mlflow.org/) for tracking experiments and runs and keeps a record of parameters and metrics for every run.
 
 ## Download
 
@@ -18,6 +18,11 @@ user@laptop:~$ cd kaggle-pg-nov-2021
 user@laptop:~/kaggle-pg-nov-2021$ python -m venv .env --prompt kgl-env
 user@laptop:~/kaggle-pg-nov-2021$ source .env/bin/activate
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$
+```
+
+For windows users replace the activation command with:
+```console
+C:\Users\user\kaggle-pg-nov-2021>.env\Scripts\activate.bat
 ```
 
 Install all dependencies:
@@ -88,3 +93,25 @@ You can sort runs by a metric or a parameter, filter the runs, etc. Click on a r
 ![Run 01](/images/run01.png)
 
 The project keeps a record of the AUC plot and the sample_submission.csv file. You can download the submission file and upload it to Kaggle.
+
+## Parameters
+
+Additional info for tunning the parameters:
+
+- `nrows`: the number of rows used when reading the train.csv file. It is a random sample extracted from the DataFrame. To use all the data `nrows=-1`. Default 10000.
+- `test_size`: the fraction of the data use as validation set. Default 0.2.
+- `n_components`: if integer higher than 1 then it is the number of components in the PCA transformation. If float between 0 and 1 then it is the explained variance to keep after PCA transformation. More info [here](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html). Default 0.95.
+- `hidden_layer_sizes`: the number of neurons in the hidden layers. You can change the number of neurons and the number of layers. Default [50, 40, 3].
+- `activation`: the activation function for the hidden layers (the last layer has always a 'sigmoid' activation function). It is possible to use any of [these](https://www.tensorflow.org/api_docs/python/tf/keras/activations). Default 'relu'.
+- `stddev`: standard deviation for the first layer. There is a [GaussianNoise](https://www.tensorflow.org/api_docs/python/tf/keras/layers/GaussianNoise) layer to avoid overfitting during training. Default 0.01.
+- `batch_size`: batch size during training. Default 1024.
+
+It is easy to add more parameters and track them with MLflow. Different scaler, other steps like [polynomial features](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html), etc.
+
+## Try many models
+
+There is a script to run many models (run_models.py). Change the values for the parameters or add more and run all the possible combinations. This may take several hours.
+
+## Other models
+
+There are two examples of other models in the models folder: scikit-learn DecissionTreeClassifier and scikit-learn MLPClassifier. If you try these models they are going to be tracked in another experiment with their own parameters and metrics. Other libraries like [PyTorch](https://pytorch.org/), [LightGBM](https://lightgbm.readthedocs.io/en/latest/), [XGBoost](https://xgboost.readthedocs.io/en/stable/) can be used following the same structure.
