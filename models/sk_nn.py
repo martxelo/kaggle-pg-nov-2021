@@ -83,20 +83,23 @@ def main():
     x_valid = valid.drop(columns=['target'])
     y_valid = valid['target']
 
-    with mlflow.start_run(run_name='Neural Net'):
-        
-        # steps for pipeline
-        scaler = StandardScaler()
-        pca = PCA(n_components=n_components)
-        clf = MLPClassifier(
-            hidden_layer_sizes=hidden_layer_sizes,
-            activation=activation)
+    # steps for pipeline
+    scaler = StandardScaler()
+    pca = PCA(n_components=n_components)
+    clf = MLPClassifier(
+        hidden_layer_sizes=hidden_layer_sizes,
+        activation=activation)
 
-        # create pipeline
-        model = Pipeline(
-            [('scaler', scaler),
-             ('pca', pca),
-             ('clf', clf)])
+    # create pipeline
+    model = Pipeline(
+        [('scaler', scaler),
+            ('pca', pca),
+            ('clf', clf)])
+
+    # train model
+    mlflow.set_experiment('SK nn')
+    experiment = mlflow.get_experiment_by_name('SK nn')
+    with mlflow.start_run(experiment_id=experiment.experiment_id):
 
         # fit pipeline
         model.fit(x_train, y_train)
@@ -111,12 +114,17 @@ def main():
         f1 = f1_score(y_valid, pred_label)
 
         # log parameters and metrics
-        mlflow.log_metrics({'auc': auc, 'acc': acc, 'f1': f1})
-        mlflow.log_params({'pca_expl_var': n_components,
-                           'pca_n_comp': model.steps[1][1].n_components_,
-                           'pca_n_feat': model.steps[1][1].n_features_,
-                           'clf_layers': hidden_layer_sizes,
-                           'clf_activation': activation})
+        mlflow.log_metrics({
+            'auc': auc,
+            'acc': acc,
+            'f1': f1})
+        mlflow.log_params({
+            'nrows': nrows,
+            'pca_expl_var': n_components,
+            'pca_n_comp': model.steps[1][1].n_components_,
+            'pca_n_feat': model.steps[1][1].n_features_,
+            'clf_layers': hidden_layer_sizes,
+            'clf_activation': activation})
 
         # log model
         mlflow.sklearn.log_model(model, 'model')

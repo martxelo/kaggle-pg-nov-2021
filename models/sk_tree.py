@@ -73,13 +73,16 @@ def main():
     x_valid = valid.drop(columns=['target'])
     y_valid = valid['target']
 
+    # classifier
+    clf = DecisionTreeClassifier(
+        criterion=criterion,
+        max_depth=max_depth)
+
+    # train model
+    mlflow.set_experiment('SK tree')
+    experiment = mlflow.get_experiment_by_name('SK tree')
     with mlflow.start_run(run_name='Decision tree'):
         
-        # classifier
-        clf = DecisionTreeClassifier(
-            criterion=criterion,
-            max_depth=max_depth)
-
         # fit classifier
         clf.fit(x_train, y_train)
 
@@ -93,9 +96,14 @@ def main():
         f1 = f1_score(y_valid, pred_label)
 
         # log parameters and metrics
-        mlflow.log_metrics({'auc': auc, 'acc': acc, 'f1': f1})
-        mlflow.log_params({'criterion': criterion,
-                           'max_depth': max_depth})
+        mlflow.log_metrics({
+            'auc': auc,
+            'acc': acc,
+            'f1': f1})
+        mlflow.log_params({
+            'nrows': nrows,
+            'criterion': criterion,
+            'max_depth': max_depth})
 
         # log model
         mlflow.sklearn.log_model(clf, 'model')
