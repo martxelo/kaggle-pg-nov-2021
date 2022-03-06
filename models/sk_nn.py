@@ -19,6 +19,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a neural network classifier')
 
     parser.add_argument(
+        '--nrows',
+        metavar='int',
+        type=int,
+        default=10000,
+        help='Fraction of data for testing models')
+    parser.add_argument(
         '--test_size',
         metavar='float',
         type=float,
@@ -51,17 +57,21 @@ def parse_args():
 
 def main():
 
+    # arguments
     args = parse_args()
-
+    nrows = args.nrows
     test_size = args.test_size
     n_components = args.n_components
     hidden_layer_sizes = tuple(args.hidden_layer_sizes)
     activation = args.activation
 
+    if nrows < 0:
+        nrows = None
+
     np.random.seed(42)
 
     # read data
-    df = pd.read_csv('data/input/train.csv', nrows=200000)
+    df = pd.read_csv('data/input/train.csv', nrows=nrows)
     df = df.drop(columns=['id'])
     
     # split in train and validation

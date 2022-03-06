@@ -16,6 +16,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a decision tree classifier')
 
     parser.add_argument(
+        '--nrows',
+        metavar='int',
+        type=int,
+        default=10000,
+        help='Fraction of data for testing models')
+    parser.add_argument(
         '--test_size',
         metavar='float',
         type=float,
@@ -41,16 +47,21 @@ def parse_args():
 
 def main():
 
+    # arguments
     args = parse_args()
-
+    nrows = args.nrows
     test_size = args.test_size
     criterion = args.criterion
     max_depth = args.max_depth
 
+    if nrows < 0:
+        nrows = None
+
+
     np.random.seed(42)
 
     # read data
-    df = pd.read_csv('data/input/train.csv', nrows=5000)
+    df = pd.read_csv('data/input/train.csv', nrows=nrows)
     df = df.drop(columns=['id'])
     
     # split in train and validation
