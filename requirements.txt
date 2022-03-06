@@ -2,7 +2,6 @@ numpy
 scipy
 pandas
 sklearn
-matplotlib
 tensorflow
 mlflow
 plotly

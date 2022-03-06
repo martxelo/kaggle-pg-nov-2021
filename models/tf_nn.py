@@ -1,5 +1,4 @@
 import argparse
-from gc import callbacks
 
 import numpy as np
 import pandas as pd
@@ -72,7 +71,7 @@ def parse_args():
     return args
 
 
-def tf_model(shape, hidden_layer_sizes, activation,stddev):
+def tf_model(shape, hidden_layer_sizes, activation, stddev):
 
     inputs = L.Input(shape)
 

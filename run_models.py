@@ -5,9 +5,7 @@ Example for running many models with different parameters
 import os
 from itertools import product
 
-
-
-
+# parameters
 hidden_layer_sizes = [
     [50, 40, 10],
     [80, 30, 5],
@@ -20,6 +18,8 @@ n_components = [100, 0.99, 0.95, 0.90, 0.50]
 stddev = [0.000, 0.010, 0.025, 0.030, 0.050]
 batch_size = [512, 1024, 2048]
 
+
+# run all combinations
 for hls, ac, ts, nc, std, bs in product(hidden_layer_sizes,
                                         activation,
                                         test_size,
@@ -35,4 +35,3 @@ for hls, ac, ts, nc, std, bs in product(hidden_layer_sizes,
     command += ' --stddev ' + str(std)
     command += ' --batch_size ' + str(bs)
     os.system(command)
-    break
