@@ -84,7 +84,7 @@ Now you can see the model with the MLflow user interface. Run:
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ mlflow ui
 ```
 
-And go to your web browser http://127.0.0.1/5000. You will se this:
+And go to your web browser http://127.0.0.1/5000. You will see this:
 
 ![Main page of MLflow](/images/main.png)
 
