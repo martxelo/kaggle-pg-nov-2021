@@ -6,32 +6,36 @@ import os
 from itertools import product
 
 # parameters
+nrows = [-1]
 hidden_layer_sizes = [
-    [50, 40, 10],
-    [80, 30, 5],
-    [40, 40, 40],
     [80, 60, 40, 30, 20, 10],
     [10, 10, 10, 10, 10, 10, 10, 10]]
-activation = ['relu', 'tanh', 'swish', 'sigmoid', 'elu']
-test_size = [0.10, 0.20]
-n_components = [100, 0.99, 0.95, 0.90, 0.50]
-stddev = [0.000, 0.010, 0.025, 0.030, 0.050]
-batch_size = [512, 1024, 2048]
+activation = ['relu', 'tanh', 'swish', 'sigmoid']
+test_size = [0.20]
+n_components = [100]
+stddev = [0.025]
+batch_size = [2048]
+epochs = [200]
 
 
 # run all combinations
-for hls, ac, ts, nc, std, bs in product(hidden_layer_sizes,
+for nr, hls, ac, ts, nc, std, bs, ep in product(nrows,
+                                        hidden_layer_sizes,
                                         activation,
                                         test_size,
                                         n_components,
                                         stddev,
-                                        batch_size):
+                                        batch_size,
+                                        epochs):
     
-    command = 'python models/tf_nn.py --nrows -1'
+    command = 'python app.py tf_nn'
+    command += ' --nrows ' + str(nr)
     command += ' --hidden_layer_sizes ' + ' '.join([str(i) for i in hls])
     command += ' --activation ' + ac
     command += ' --test_size ' + str(ts)
     command += ' --n_components ' + str(nc)
     command += ' --stddev ' + str(std)
     command += ' --batch_size ' + str(bs)
+    command += ' --epochs ' + str(ep)
+    print(command)
     os.system(command)

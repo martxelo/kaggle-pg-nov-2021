@@ -5,40 +5,59 @@ This repo allows to fit a neural network model (multi layer perceptron) with [Te
 ## Download
 
 Download the repo with:
-```bash
+```
 user@laptop:~$ git clone https://github.com/martxelo/kaggle-pg-nov-2021.git
 ```
+
+Or download a zip file from [here](https://github.com/martxelo/kaggle-pg-nov-2021/archive/refs/heads/main.zip).
 
 ## Configure
 
 In the project folder create a python virtual environment and activate it:
 
-```bash
+```
 user@laptop:~$ cd kaggle-pg-nov-2021
-user@laptop:~/kaggle-pg-nov-2021$ python -m venv .env --prompt kgl-env
+user@laptop:~/kaggle-pg-nov-2021$ python -m venv .venv --prompt kgl-env
 user@laptop:~/kaggle-pg-nov-2021$ source .env/bin/activate
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$
 ```
 
 For windows users replace the activation command with:
-```console
-C:\Users\user\kaggle-pg-nov-2021>.env\Scripts\activate.bat
+```
+C:\Users\user\kaggle-pg-nov-2021>.venv\Scripts\activate.bat
 ```
 
 Install all dependencies:
 
-```bash
+```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ pip install -r requirements.txt
 ```
 
 ## Usage
 
-To see the help run this from the project directory:
+To see the help run this from the project folder:
 
 ```
-(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python models/tf_nn.py -h
+(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py -h
+usage: app.py [-h] {tf_nn,sk_nn,sk_tree} ...
 
-Train a neural network classifier
+Select a model to train
+
+positional arguments:
+  {tf_nn,sk_nn,sk_tree}
+    tf_nn               Train a TensorFlow MLP model
+    sk_nn               Train a SKlearn MLPClassifier model
+    sk_tree             Train a SKlearn DecisionTreeClassifier model
+
+optional arguments:
+  -h, --help            show this help message and exit
+```
+
+Each model has its own help. For the TensorFlow model:
+
+```
+(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn -h
+usage: app.py tf_nn [-h] [--nrows int] [--test_size float] [--n_components float] [--hidden_layer_sizes tuple [tuple ...]] [--activation string] [--stddev float] [--epochs int] [--batch_size int]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -49,6 +68,7 @@ optional arguments:
                         Neurons in hidden layers
   --activation string   Activation function for hidden layers
   --stddev float        Gaussian noise for not overfitting
+  --epochs int          Number of epochs
   --batch_size int      Batch_size for fitting the model
 ```
 
@@ -64,17 +84,19 @@ I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror
 ```
 ---
 
-All the parameters have default values. You can use other parameters for training a model. For example, to train a model with three hidden layers with (60, 50, 10) neurons and 'tanh' activation function run:
+All the parameters have default values. You can use other parameters for training a model. For example, to train a model with three hidden layers with [10, 10, 10, 10, 10, 10, 10, 10] neurons and 'tanh' activation function run:
 
 ```
-(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python models/tf_nn.py --hidden_layer_sizes 60 50 10 --activation tanh
+(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn --hidden_layer_sizes 10 10 10 10 10 10 10 10 --activation tanh
 ```
 
 Train another model with:
 
 ```
-(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python models/tf_nn.py --hidden_layer_sizes 40 30 20 --activation relu
+(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn --hidden_layer_sizes 80 60 40 30 20 10 --activation swish
 ```
+
+Run as many models as you want.
 
 ## Tracking models
 
@@ -104,13 +126,14 @@ Additional info for tunning the parameters:
 - `hidden_layer_sizes`: the number of neurons in the hidden layers. You can change the number of neurons and the number of layers. Default [50, 40, 3].
 - `activation`: the activation function for the hidden layers (the last layer has always a 'sigmoid' activation function). It is possible to use any of [these](https://www.tensorflow.org/api_docs/python/tf/keras/activations). Default 'relu'.
 - `stddev`: standard deviation for the first layer. There is a [GaussianNoise](https://www.tensorflow.org/api_docs/python/tf/keras/layers/GaussianNoise) layer to avoid overfitting during training. Default 0.01.
+- `epochs`: number of epochs for training. Default 200.
 - `batch_size`: batch size during training. Default 1024.
 
-It is easy to add more parameters and track them with MLflow. Different scaler, other steps like [polynomial features](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html), etc.
+It is easy to add more parameters and track them with MLflow. Different scaler, other steps like [polynomial features](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html), the number of epochs, the validation loss for every epoch, etc.
 
 ## Try many models
 
-There is a script to run many models (run_models.py). Change the values for the parameters or add more and run all the possible combinations. This may take several hours.
+There is a script to run many models (run_models.py). Change the values for the parameters or add more and run all the possible combinations. Be careful, this may take several hours.
 
 ## Other models
 
