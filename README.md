@@ -5,7 +5,7 @@ This repo allows to fit a neural network model (multi layer perceptron) with [Te
 ## Download
 
 Download the repo with:
-```bash
+```
 user@laptop:~$ git clone https://github.com/martxelo/kaggle-pg-nov-2021.git
 ```
 
@@ -15,7 +15,7 @@ Or download a zip file from [here](https://github.com/martxelo/kaggle-pg-nov-202
 
 In the project folder create a python virtual environment and activate it:
 
-```bash
+```
 user@laptop:~$ cd kaggle-pg-nov-2021
 user@laptop:~/kaggle-pg-nov-2021$ python -m venv .venv --prompt kgl-env
 user@laptop:~/kaggle-pg-nov-2021$ source .env/bin/activate
@@ -23,13 +23,13 @@ user@laptop:~/kaggle-pg-nov-2021$ source .env/bin/activate
 ```
 
 For windows users replace the activation command with:
-```console
+```
 C:\Users\user\kaggle-pg-nov-2021>.venv\Scripts\activate.bat
 ```
 
 Install all dependencies:
 
-```bash
+```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ pip install -r requirements.txt
 ```
 
@@ -37,7 +37,7 @@ Install all dependencies:
 
 To see the help run this from the project folder:
 
-```bash
+```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py -h
 usage: app.py [-h] {tf_nn,sk_nn,sk_tree} ...
 
@@ -55,7 +55,7 @@ optional arguments:
 
 Each model has its own help. For the TensorFlow model:
 
-```bash
+```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn -h
 usage: app.py tf_nn [-h] [--nrows int] [--test_size float] [--n_components float] [--hidden_layer_sizes tuple [tuple ...]] [--activation string] [--stddev float] [--epochs int] [--batch_size int]
 
@@ -77,7 +77,7 @@ optional arguments:
 
 If your computer does not have GPU a warning is thrown (ignore the message):
 
-```bash
+```
 W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
 
 I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
@@ -86,13 +86,13 @@ I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror
 
 All the parameters have default values. You can use other parameters for training a model. For example, to train a model with three hidden layers with [10, 10, 10, 10, 10, 10, 10, 10] neurons and 'tanh' activation function run:
 
-```bash
+```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn --hidden_layer_sizes 10 10 10 10 10 10 10 10 --activation tanh
 ```
 
 Train another model with:
 
-```bash
+```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn --hidden_layer_sizes 80 60 40 30 20 10 --activation swish
 ```
 
