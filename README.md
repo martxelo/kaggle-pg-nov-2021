@@ -84,7 +84,7 @@ I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror
 ```
 ---
 
-All the parameters have default values. You can use other parameters for training a model. For example, to train a model with three hidden layers with [10, 10, 10, 10, 10, 10, 10, 10] neurons and 'tanh' activation function run:
+All the parameters have default values. You can use other parameters for training a model. For example, to train a model with eight hidden layers with [10, 10, 10, 10, 10, 10, 10, 10] neurons and 'tanh' activation function run:
 
 ```
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ python app.py tf_nn --hidden_layer_sizes 10 10 10 10 10 10 10 10 --activation tanh
