@@ -18,7 +18,7 @@ In the project folder create a python virtual environment and activate it:
 ```
 user@laptop:~$ cd kaggle-pg-nov-2021
 user@laptop:~/kaggle-pg-nov-2021$ python -m venv .venv --prompt kgl-env
-user@laptop:~/kaggle-pg-nov-2021$ source .env/bin/activate
+user@laptop:~/kaggle-pg-nov-2021$ source .venv/bin/activate
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$
 ```
 
