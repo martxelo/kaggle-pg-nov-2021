@@ -1,5 +1,3 @@
-import argparse
-
 import numpy as np
 import pandas as pd
 
@@ -14,64 +12,10 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 import mlflow
 
-from utils import log_metric
+from .utils import log_metric
 
 
-
-def parse_args():
-
-    parser = argparse.ArgumentParser(description='Train a neural network classifier')
-
-    parser.add_argument(
-        '--nrows',
-        metavar='int',
-        type=int,
-        default=10000,
-        help='Fraction of data for testing models')
-    parser.add_argument(
-        '--test_size',
-        metavar='float',
-        type=float,
-        default=0.2,
-        help='Select fraction of test data')
-    parser.add_argument(
-        '--n_components',
-        metavar='float',
-        type=float,
-        default=0.95,
-        help='Select number of components for PCA')
-    parser.add_argument(
-        '--hidden_layer_sizes',
-        metavar='tuple',
-        type=int,
-        nargs='+',
-        default=[50, 40, 3],
-        help='Neurons in hidden layers')
-    parser.add_argument(
-        '--activation',
-        metavar='string',
-        type=str,
-        default='relu',
-        help='Activation function for hidden layers')
-    parser.add_argument(
-        '--stddev',
-        metavar='float',
-        type=float,
-        default=0.01,
-        help='Gaussian noise for not overfitting')
-    parser.add_argument(
-        '--batch_size',
-        metavar='int',
-        type=int,
-        default=1024,
-        help='Batch_size for fitting the model')
-
-    args = parser.parse_args()
-
-    return args
-
-
-def tf_model(shape, hidden_layer_sizes, activation, stddev):
+def get_tf_model(shape, hidden_layer_sizes, activation, stddev):
 
     inputs = L.Input(shape)
 
@@ -95,10 +39,9 @@ def tf_model(shape, hidden_layer_sizes, activation, stddev):
     return model
 
 
-def main():
+def train_tf_nn(args):
 
     # arguments
-    args = parse_args()
     nrows = args.nrows
     test_size = args.test_size
     n_components = args.n_components
@@ -141,7 +84,7 @@ def main():
     x_valid = pca.transform(x_valid)
 
     # get model
-    model = tf_model(
+    model = get_tf_model(
         x_train.shape[1],
         hidden_layer_sizes,
         activation,

@@ -1,5 +1,3 @@
-import argparse
-
 import numpy as np
 import pandas as pd
 
@@ -11,55 +9,12 @@ from sklearn.pipeline import Pipeline
 
 import mlflow
 
-from utils import log_metric
+from .utils import log_metric
 
 
-
-def parse_args():
-
-    parser = argparse.ArgumentParser(description='Train a neural network classifier')
-
-    parser.add_argument(
-        '--nrows',
-        metavar='int',
-        type=int,
-        default=10000,
-        help='Fraction of data for testing models')
-    parser.add_argument(
-        '--test_size',
-        metavar='float',
-        type=float,
-        default=0.2,
-        help='Select fraction of test data')
-    parser.add_argument(
-        '--n_components',
-        metavar='float',
-        type=float,
-        default=0.95,
-        help='Select number of components for PCA')
-    parser.add_argument(
-        '--hidden_layer_sizes',
-        metavar='tuple',
-        type=int,
-        nargs='+',
-        default=(50, 40, 3),
-        help='Neurons in hidden layers')
-    parser.add_argument(
-        '--activation',
-        metavar='string',
-        type=str,
-        default='logistic',
-        help='Activation function for hidden layers')
-
-    args = parser.parse_args()
-
-    return args
-
-
-def main():
+def train_sk_nn(args):
 
     # arguments
-    args = parse_args()
     nrows = args.nrows
     test_size = args.test_size
     n_components = args.n_components
