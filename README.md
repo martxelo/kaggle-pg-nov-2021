@@ -33,6 +33,40 @@ Install all dependencies:
 (kgl-env) user@laptop:~/kaggle-pg-nov-2021$ pip install -r requirements.txt
 ```
 
+Create folders for data input and output, and unzip the [data](https://www.kaggle.com/c/tabular-playground-series-nov-2021/data) in the input folder:
+
+```
+(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ mkdir -p data/{input,output}
+(kgl-env) user@laptop:~/kaggle-pg-nov-2021$ tree
+.
+├── app.py
+├── data
+│   ├── input
+│   │   ├── sample_submission.csv
+│   │   ├── tabular-playground-series-nov-2021.zip
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── output
+└── ...
+```
+
+For Windows users:
+
+```
+C:\Users\user\kaggle-pg-nov-2021>mkdir data\input data\output
+C:\Users\user\kaggle-pg-nov-2021>tree
+C:.
+├── app.py
+├── data
+│   ├── input
+│   │   ├── sample_submission.csv
+│   │   ├── tabular-playground-series-nov-2021.zip
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── output
+└── ...
+```
+
 ## Usage
 
 To see the help run this from the project folder:
