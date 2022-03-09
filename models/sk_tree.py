@@ -11,6 +11,13 @@ import mlflow
 from .utils import log_metric
 
 
+# global variables
+INPUT_TRAIN = 'data/input/train.csv'
+INPUT_TEST = 'data/input/test.csv'
+INPUT_SUB = 'data/input/sample_submission.csv'
+OUTPUT_SUB = 'data/output/sample_submission.csv'
+
+
 def train_sk_tree(args):
 
     # arguments
@@ -24,7 +31,7 @@ def train_sk_tree(args):
         nrows = None
 
     # read data
-    df = pd.read_csv('data/input/train.csv')
+    df = pd.read_csv(INPUT_TRAIN)
     df = df.drop(columns=['id'])
 
     # subsample
@@ -66,17 +73,17 @@ def train_sk_tree(args):
             'max_depth': max_depth})
 
         # predict on test
-        test = pd.read_csv('data/input/test.csv')
+        test = pd.read_csv(INPUT_TEST)
         test = test.drop(columns='id')
         test_proba = model.predict_proba(test)
 
         # write submission
-        sam_sub = pd.read_csv('data/input/sample_submission.csv')
+        sam_sub = pd.read_csv(INPUT_SUB)
         sam_sub['target'] = test_proba[:,1]
-        sam_sub.to_csv('data/output/sample_submission.csv', index=False)
+        sam_sub.to_csv(OUTPUT_SUB, index=False)
 
         # log submission
-        mlflow.log_artifact('data/output/sample_submission.csv')
+        mlflow.log_artifact(OUTPUT_SUB)
 
 if __name__ == '__main__':
     main()
