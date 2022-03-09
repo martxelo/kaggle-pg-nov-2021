@@ -96,8 +96,3 @@ def train_sk_nn(args):
 
         # log submission
         mlflow.log_artifact(OUTPUT_SUB)
-
-
-
-if __name__ == '__main__':
-    main()

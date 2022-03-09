@@ -84,6 +84,3 @@ def train_sk_tree(args):
 
         # log submission
         mlflow.log_artifact(OUTPUT_SUB)
-
-if __name__ == '__main__':
-    main()
