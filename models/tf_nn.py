@@ -55,6 +55,7 @@ def train_tf_nn(args):
     hidden_layer_sizes = args.hidden_layer_sizes
     activation = args.activation
     stddev = args.stddev
+    epochs = args.epochs
     batch_size = args.batch_size
 
     # correct some arguments
@@ -112,7 +113,7 @@ def train_tf_nn(args):
         model.fit(
             x_train,
             y_train,
-            epochs=500,
+            epochs=epochs,
             batch_size=batch_size,
             validation_data=(x_valid, y_valid),
             callbacks=callbacks)
